@@ -106,6 +106,14 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     # Encode categoricals for ML
+    # Contract type encoding
+    if "contract_type" in df.columns:
+        df["contract_month_to_month"] = (df["contract_type"] == "Month-to-Month").astype(int)
+        df["contract_two_year"]       = (df["contract_type"] == "Two Year").astype(int)
+    else:
+        df["contract_month_to_month"] = 0
+        df["contract_two_year"]       = 0
+
     df["gender_enc"]   = (df["gender"] == "Male").astype(int)
     df["germany_enc"]  = (df["country"] == "Germany").astype(int)
     df["france_enc"]   = (df["country"] == "France").astype(int)
@@ -125,7 +133,8 @@ def prepare_ml_features(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
         "balance_per_product", "has_zero_balance", "transaction_rate",
         "salary_balance_ratio", "high_risk_flag",
         # Encoded categoricals
-        "gender_enc", "germany_enc", "france_enc"
+        "gender_enc", "germany_enc", "france_enc",
+        "contract_month_to_month", "contract_two_year"
     ]
     X = df[feature_cols].fillna(0)
     y = df["churned"]

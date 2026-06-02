@@ -38,6 +38,7 @@ def create_tables():
             months_inactive     INTEGER,
             num_contacts        INTEGER,
             satisfaction_score  INTEGER,
+            contract_type       TEXT,
             balance_per_product REAL,
             has_zero_balance    INTEGER,
             transaction_rate    REAL,
@@ -101,7 +102,7 @@ def load_customers(df: pd.DataFrame) -> int:
     cols = ["customer_id","age","gender","country","credit_score","tenure","balance",
             "num_products","has_credit_card","is_active_member","estimated_salary",
             "num_transactions","avg_transaction_amt","months_inactive","num_contacts",
-            "satisfaction_score","balance_per_product","has_zero_balance",
+            "satisfaction_score","contract_type","balance_per_product","has_zero_balance",
             "transaction_rate","high_risk_flag","churned"]
     inserted = 0
     for _, r in df[cols].iterrows():

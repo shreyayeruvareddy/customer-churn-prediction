@@ -120,6 +120,17 @@ def generate_customers() -> pd.DataFrame:
         churn_prob = np.clip(churn_prob, 0.01, 0.99)
         churned    = int(np.random.random() < churn_prob)
 
+        # Contract type — month-to-month customers churn ~3x more
+        contract_type = np.random.choice(
+            ["Month-to-Month", "One Year", "Two Year"],
+            p=[0.55, 0.25, 0.20]
+        )
+        # Contract type influences churn
+        if contract_type == "Month-to-Month": churn_prob = np.clip(churn_prob * 1.45, 0.01, 0.99)
+        elif contract_type == "Two Year":     churn_prob = np.clip(churn_prob * 0.40, 0.01, 0.99)
+        # Recalculate churned with contract adjustment
+        churned = int(np.random.random() < churn_prob)
+
         records.append({
             "customer_id":         f"CUST_{i:05d}",
             "age":                 age,
@@ -137,6 +148,7 @@ def generate_customers() -> pd.DataFrame:
             "months_inactive":     months_inactive,
             "num_contacts":        num_contacts,
             "satisfaction_score":  satisfaction,
+            "contract_type":       contract_type,
             "churned":             churned
         })
 
